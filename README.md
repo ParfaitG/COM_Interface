@@ -8,6 +8,7 @@ Using Windows' [**Component Object Model (COM)**](https://docs.microsoft.com/en-
 - **Python**: [`pywin32`](https://github.com/mhammond/pywin32) _(for win32com.client package)_
 - **R**: [`RDCOMClient`](https://www.omegahat.net/RDCOMClient/) _(from omegahat repository)_
 
+<br/>
+<br/>
 
-
-<img src="https://github.com/ParfaitG/COM_Interface/blob/main/R/Data/R_MSO_Screenshot.png" width="600px" alt="R MS Ofice COM Automation Screenshot"/>
+<div style="text-align:center"><img src="https://github.com/ParfaitG/COM_Interface/blob/main/R/Data/R_MSO_Screenshot.png" width="800px" alt="R MS Ofice COM Automation Screenshot"/></div>
