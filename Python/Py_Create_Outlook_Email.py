@@ -128,7 +128,7 @@ with tempfile.TemporaryDirectory() as td:
 
     finally:
         # RELEASE RESOURCES
-        signature = None; olTbl = None; olAttachments = None; 
+        insp = None; olTbl = None; olAttachments = None; 
         olMail = None; olApp = None
         del signature, olTbl, olAttachments, olMail, olApp
 

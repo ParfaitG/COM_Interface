@@ -57,8 +57,5 @@ except Exception as e:
 
 finally:
     # RELEASE RESOURCES
-    dbEngine = None; workspace = None; tbl = None; accDB = None; accApp = None
-    del dbEngine, workspace, tbl, accDB, accApp
-
-
-
+    tbl = None; accDB = None; accApp = None
+    del tbl, accDB, accApp
