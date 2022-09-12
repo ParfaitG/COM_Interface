@@ -97,7 +97,7 @@ tryCatch({
     # ADD RECIPIENTS AND SUBJECT
     insp <- olMail$GetInspector()
     signature <- olMail[["HTMLBody"]]                                   
-    olMail[["Recipients"]]$Add("pgasana@anl.gov")                     
+    olMail[["Recipients"]]$Add("crug@meetup.com")                     
     olMail[["Subject"]] <- "Precious Metals Analysis"
 
     # ADD ATTACHMENTS

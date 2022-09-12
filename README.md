@@ -7,7 +7,7 @@ Using Windows' [**Component Object Model (COM)**](https://docs.microsoft.com/en-
 - **PowerShell**: [`NewObject -ComObject`](https://docs.microsoft.com/en-us/powershell/scripting/samples/creating-.net-and-com-objects--new-object-?view=powershell-7.2#creating-com-objects-with-new-object) _(built-in cmdlet)_
 - **Python**: [`pywin32`](https://github.com/mhammond/pywin32) _(for win32com.client package)_
 - **R**: [`RDCOMClient`](https://www.omegahat.net/RDCOMClient/) _(from omegahat repository)_
-- **VBScript**: [`CreateObject`](https://docs.microsoft.com/en-us/windows/win32/com/using-com-objects-in-windows-script-host)
+- **VBScript**: [`CreateObject`](https://docs.microsoft.com/en-us/windows/win32/com/using-com-objects-in-windows-script-host) _(built-in for Windows Script Host)_
 
 <br/>
 <br/>

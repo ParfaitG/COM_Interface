@@ -68,7 +68,7 @@ try {
     # ADD RECIPIENTS AND SUBJECT
     $insp = $olMail.GetInspector
     $signature = $olMail.HTMLBody
-    $olMail.Recipients.Add("pgasana@anl.gov") | Out-Null
+    $olMail.Recipients.Add("crug@meetup.com") | Out-Null
     $olMail.Subject = "Precious Metals Analysis"
 
     # ADD ATTACHMENTS
