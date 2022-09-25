@@ -15,8 +15,6 @@ cd "$Env:PROJECT_HOME\R"
     echo "`nSTEP 4: R_Create_Access_Database.R - $(Get-Date -format 'u')"
     Rscript R_Create_Access_Database.R
     
-    Start-Sleep -Seconds 5
-    
     echo "`nSTEP 5: R_Create_Outlook_Email.R - $(Get-Date -format 'u')"
     Rscript R_Create_Outlook_Email.R
     

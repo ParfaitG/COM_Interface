@@ -44,8 +44,52 @@ tryCatch({
     xlCells[["Font"]][["Size"]] = "10"
     xlCells[["Font"]][["Color"]] = 0
     
+    # CREATE PIVOT TABLE
+    pvtWks <- xlWbk$Worksheets()$Add(After=xlWks)
+    pvtWks[["Name"]] <- "PIVOT"
+    
+    pvtCache <- xlWbk$PivotCaches()$Create(1, xlWks$UsedRange())
+    pvtTable <- pvtCache$CreatePivotTable(pvtWks$Cells(4, 2), "MetalsPivot")
+    
+    pvtFld <- pvtTable$PivotFields("metal")
+    pvtFld[["Orientation"]] <- 1
+    pvtFld[["Position"]] <- 1
+    
+    avgFld <- pvtTable$PivotFields("avg_price")
+    pvtFld <- pvtTable$AddDataField(avgFld)
+    pvtFld[["Function"]] <- -4139
+    pvtFld[["Caption"]] <- "Min Price"
+    
+    pvtFld <- pvtTable$AddDataField(avgFld)
+    pvtFld[["Function"]] <- -4106
+    pvtFld[["Caption"]] <- "Avg Price"
+    
+    pvtFld <- pvtTable$AddDataField(avgFld)
+    pvtFld[["Function"]] <- -4136
+    pvtFld[["Caption"]] <- "Max Price"
+    
+    pvtFld <- pvtTable$AddDataField(avgFld)
+    pvtFld[["Function"]] <- -4155
+    pvtFld[["Caption"]] <- "Std Price"
+
+    rng <- xlApp$Union(
+        pvtWks$Columns(3),
+        pvtWks$Columns(4),
+        pvtWks$Columns(5),
+        pvtWks$Columns(6),
+        pvtWks$Columns(7) 
+    ) 
+    rng[["NumberFormat"]] <- "$#,##0.00"
+    rng[["HorizontalAlignment"]] <- -4152
+    
+    # ADJUST DEFAULT FONT
+    xlCells <- pvtWks$Cells()
+    xlCells[["Font"]][["Name"]] = "Arial"
+    xlCells[["Font"]][["Size"]] = "10"
+    xlCells[["Font"]][["Color"]] = 0
+    
     # SAVE WORKBOOK
-    xlWbk$SaveAs(xlFile)
+    xlWbk$SaveAs(xlFile, 51)
 
     # SHOW BACKGROUND APP
     xlApp[["Visible"]] <- TRUE
@@ -54,6 +98,7 @@ tryCatch({
 
 , error = function(e) {
     identity(e)
+    
     # CLOSE OBJECTS
     if(exists("xlQt")) xlQt$Delete()
     if(exists("xlWbk")) xlWbk$Close(FALSE)
@@ -61,9 +106,11 @@ tryCatch({
 
 }, finally = {
     # RELEASE RESOURCES
-    xlQt <- xlCells <- xlWks <- xlWbk <- xlApp <- NULL
-    rm(xlQt, xlCells, xlWks, xlWbk, xlApp)
+    rng <- NULL; avgFld <- NULL
+    pvtFld <- NULL; pvtTable <- NULL; pvtCache <- NULL; pvtWks <- NULL
+    xlQt <- NULL; xlCells <- NULL; xlWks <- NULL; xlWbk <- NULL; xlApp <- NULL
+    rm(
+      rng, avgFld, pvtWks, pvtCache, pvtTable, pvtFld,
+      xlQt, xlCells, xlWks, xlWbk, xlApp
+    )
 })
-
-
-

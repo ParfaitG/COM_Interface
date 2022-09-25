@@ -28,13 +28,14 @@ try:
     else:
         # OPEN DATABASE
         output = accApp.OpenCurrentDatabase(dbFile)
-    
-    # CLEAN OUT TABLE
+
     accDB = accApp.CurrentDb()
+
+    # CLEAN OUT TABLE
     for tbl in accDB.TableDefs:
         if tbl.Name == "metals":
             accDB.Execute("DELETE FROM metals")
-    
+
     # IMPORT CSV
     accApp.DoCmd.TransferText(
        0,
@@ -43,9 +44,28 @@ try:
        HasFieldNames = True
     )
 
+    # CREATE QUERY
+    for qry in accDB.QueryDefs:
+        if qry.Name == "metals_agg":
+            accDB.Execute("DROP TABLE metals_agg")
+
+    qry = accDB.CreateQueryDef(
+        "metals_agg",
+        (
+            "SELECT metal, "
+            "       Ccur(MIN(avg_price)) AS MinPrice, "
+            "       Ccur(AVG(avg_price)) AS AvgPrice, "
+            "       Ccur(MAX(avg_price)) AS MaxPrice, "
+            "       Ccur(STDEV(avg_price)) AS StdPrice "
+            "FROM metals "
+            "GROUP BY metal"
+        )
+    )
+
     #SHOW BACKGROUND APP
     accApp.UserControl = True
     output = accApp.DoCmd.OpenTable("metals")
+    output = accApp.DoCmd.OpenQuery("metals_agg")
 
 except Exception as e:
     print(e)
@@ -57,5 +77,5 @@ except Exception as e:
 
 finally:
     # RELEASE RESOURCES
-    tbl = None; accDB = None; accApp = None
+    qry = None; tbl = None; accDB = None; accApp = None
     del tbl, accDB, accApp

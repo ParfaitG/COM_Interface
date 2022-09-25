@@ -28,14 +28,16 @@ tryCatch({
         output <- accApp$OpenCurrentDatabase(dbFile)
     }
     
-    # CLEAN OUT TABLE
     accDB = accApp$CurrentDb()
-    for(i in 1:accDB$TableDefs()$Count()) {
-        if(accDB$TableDefs(i-1)[["Name"]] == "metals") { 
-            accDB$Execute("DELETE FROM metals") 
+
+    # CLEAN OUT TABLE
+    if(accDB$TableDefs()$Count() > 0) {
+        for(i in 1:accDB$TableDefs()$Count()) {
+            if(accDB$TableDefs(i-1)[["Name"]] == "metals") { 
+                accDB$Execute("DELETE FROM metals") 
+            }
         }
     }
-
     # IMPORT CSV    
     accApp$DoCmd()$TransferText(
        0,
@@ -44,10 +46,32 @@ tryCatch({
        HasFieldNames = TRUE
     )
     
+    # CREATE QUERY
+    if(accDB$QueryDefs()$Count() > 0) {
+        for(i in 1:accDB$QueryDefs()$Count()) {
+            if(accDB$QueryDefs(i-1)[["Name"]] == "metals_agg") { 
+                accDB$Execute("DROP TABLE metals_agg") 
+            }
+        }
+    }
+    accDB$CreateQueryDef(
+        "metals_agg", 
+        paste0(
+            "SELECT metal, ",
+            "       CCur(MIN(avg_price)) AS MinPrice,",
+            "       CCur(AVG(avg_price)) AS AvgPrice,",
+            "       CCur(MAX(avg_price)) AS MaxPrice,",
+            "       Ccur(STDEV(avg_price)) AS StdPrice",
+            " FROM metals",
+            " GROUP BY metal"
+        )
+    )
+    
     #SHOW BACKGROUND APP
     accApp[["UserControl"]] <- TRUE
     accApp[["Visible"]] <- TRUE
     output <- accApp$DoCmd()$OpenTable("metals")
+    output <- accApp$DoCmd()$OpenQuery("metals_agg")
     
 }, warning = identity
 
@@ -61,7 +85,7 @@ tryCatch({
 
 }, finally = {
     # RELEASE RESOURCES
-    accDB <- accApp <- NULL
+    accDB <- NULL; accApp <- NULL
     rm(accDB, accApp)
 })
 
